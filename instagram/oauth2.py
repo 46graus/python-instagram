@@ -97,9 +97,10 @@ class OAuth2AuthExchangeRequest(object):
 
     def get_authorize_login_url(self, scope=None):
         http_object = Http(disable_ssl_certificate_validation=True)
+        headers = {'Content-type': 'application/x-www-form-urlencoded'}
 
         url = self._url_for_authorize(scope=scope)
-        response, content = http_object.request(url)
+        response, content = http_object.request(url, headers=headers)
         if response['status'] != '200':
             raise OAuth2AuthExchangeError("The server returned a non-200 response for URL %s" % url)
         redirected_to = response['content-location']
