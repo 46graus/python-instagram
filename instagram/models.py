@@ -62,7 +62,7 @@ class Media(ApiModel):
 
     def get_standard_resolution_url(self):
         if self.type == 'image':
-            return self.images['standard_resolution'].url if hasattr(self, 'images') else ''
+            return self.images.get('standard_resolution', EmptyMedia()).url if hasattr(self, 'images') else ''
         else:
             return self.videos.get('standard_resolution', EmptyMedia()).url if hasattr(self, 'videos') else ''
 
