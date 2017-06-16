@@ -26,6 +26,16 @@ class ApiModel(object):
             return unicode(self).encode('utf-8')
 
 
+class EmptyMedia(ApiModel):
+    def __init__(self, url="", width=0, height=0):
+        self.url = url
+        self.height = height
+        self.width = width
+
+    def __unicode__(self):
+        return "EmptyMedia: %s" % self.url
+
+
 class Image(ApiModel):
 
     def __init__(self, url, width, height):
@@ -52,20 +62,19 @@ class Media(ApiModel):
 
     def get_standard_resolution_url(self):
         if self.type == 'image':
-            return self.images['standard_resolution'].url
+            return self.images['standard_resolution'].url if hasattr(self, 'images') else ''
         else:
-            return self.videos['standard_resolution'].url
+            return self.videos.get('standard_resolution', EmptyMedia()).url if hasattr(self, 'videos') else ''
 
     def get_low_resolution_url(self):
         if self.type == 'image':
-            return self.images['low_resolution'].url
+            return self.images.get('low_resolution', EmptyMedia()).url if hasattr(self, 'images') else ''
         else:
-            return self.videos['low_resolution'].url
+            return self.videos.get('low_resolution', EmptyMedia()).url if hasattr(self, 'videos') else ''
 
 
     def get_thumbnail_url(self):
-        return self.images['thumbnail'].url
-
+        return self.images.get('thumbnail', {'url': ''}).url if hasattr(self, 'images') else ''
 
     def __unicode__(self):
         return "Media: %s" % self.id
