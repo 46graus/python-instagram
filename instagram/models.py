@@ -38,7 +38,7 @@ class EmptyMedia(ApiModel):
 
 class Image(ApiModel):
 
-    def __init__(self, url, width, height):
+    def __init__(self, url, width, height, id=None):
         self.url = url
         self.height = height
         self.width = width
